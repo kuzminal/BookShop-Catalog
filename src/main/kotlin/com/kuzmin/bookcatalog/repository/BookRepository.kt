@@ -11,6 +11,6 @@ import reactor.core.publisher.Mono
 interface BookRepository: ReactiveSortingRepository<Book, ObjectId> {
     fun findAllByTitle(title: String): Flux<Book>
     fun findByIsbn(isbn: String): Mono<Book>
-    fun existsByIsbn(isbn: String): Boolean
-    fun deleteByIsbn(isbn: String)
+    fun existsByIsbn(isbn: String): Mono<Boolean>
+    fun deleteByIsbn(isbn: String): Mono<Boolean>
 }

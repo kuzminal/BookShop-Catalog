@@ -6,5 +6,8 @@ import reactor.core.publisher.Mono
 
 interface IBookService {
     fun save(book: Mono<Book>): Mono<Book>
-    fun search(name: String): Flux<Book>
+    fun search(title: String): Flux<Book>
+    fun findByIsbn(isbn: String): Mono<Book>
+    fun existsByIsbn(isbn: String): Mono<Boolean>
+    fun deleteByIsbn(isbn: String): Mono<Boolean>
 }

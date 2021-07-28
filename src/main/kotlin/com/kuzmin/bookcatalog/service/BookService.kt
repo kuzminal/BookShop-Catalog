@@ -11,14 +11,22 @@ import reactor.core.publisher.Mono
 
 @Service
 class BookService(val bookRepository: BookRepository) : IBookService {
-    override fun save(@RequestBody book: Mono<Book>): Mono<Book> = book.flatMap(bookRepository::save);
-    override fun search(@RequestParam(name = "title") title: String): Flux<Book> {
-        return if (title.isNotBlank()) bookRepository.findAllByTitle(title) else bookRepository.findAll(
-            Sort.by(
-                Sort.Order.asc(
-                    "title"
-                )
-            )
-        )
+    override fun save(book: Mono<Book>): Mono<Book> = book.flatMap { bookFromRequest ->
+        existsByIsbn(bookFromRequest.isbn).flatMap { exist ->
+            if (!exist)
+                bookRepository.save(bookFromRequest)
+            else
+                Mono.just(bookFromRequest)
+        }
     }
+
+    override fun search(title: String): Flux<Book> =
+        if (title.isNotBlank()) bookRepository.findAllByTitle(title)
+        else bookRepository.findAll(Sort.by(Sort.Order.asc("title")))
+
+    override fun findByIsbn(isbn: String): Mono<Book> = bookRepository.findByIsbn(isbn)
+
+    override fun existsByIsbn(isbn: String): Mono<Boolean> = bookRepository.existsByIsbn(isbn)
+
+    override fun deleteByIsbn(isbn: String): Mono<Boolean> = bookRepository.deleteByIsbn(isbn)
 }

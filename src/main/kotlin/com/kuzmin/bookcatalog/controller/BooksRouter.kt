@@ -10,7 +10,9 @@ class BooksRouter(private val booksHandler: BooksHandler) {
     fun customerRoutes() = router {
         "/books".nest {
             POST("/", booksHandler::create)
+            DELETE("/{isbn}", booksHandler::deleteByIsbn)
             GET("/", booksHandler::search)
+            GET("/{isbn}", booksHandler::findByIsbn)
         }
     }
 }
