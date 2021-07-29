@@ -12,5 +12,6 @@ interface BookRepository: ReactiveSortingRepository<Book, ObjectId> {
     fun findAllByTitle(title: String): Flux<Book>
     fun findByIsbn(isbn: String): Mono<Book>
     fun existsByIsbn(isbn: String): Mono<Boolean>
-    fun deleteByIsbn(isbn: String): Mono<Boolean>
+    fun deleteByIsbn(isbn: String): Mono<Long>
+    fun deleteByTitle(isbn: String): Mono<Long>
 }

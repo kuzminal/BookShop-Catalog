@@ -1,13 +1,14 @@
 package com.kuzmin.bookcatalog.service
 
+import com.kuzmin.bookcatalog.exception.BookAlreadyExistException
+import com.kuzmin.bookcatalog.exception.BookNotFoundException
 import com.kuzmin.bookcatalog.model.entity.Book
 import com.kuzmin.bookcatalog.repository.BookRepository
 import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Service
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestParam
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
+import reactor.kotlin.core.publisher.switchIfEmpty
 
 @Service
 class BookService(val bookRepository: BookRepository) : IBookService {
@@ -16,7 +17,7 @@ class BookService(val bookRepository: BookRepository) : IBookService {
             if (!exist)
                 bookRepository.save(bookFromRequest)
             else
-                Mono.just(bookFromRequest)
+                Mono.error(BookAlreadyExistException(bookFromRequest.isbn))
         }
     }
 
@@ -24,9 +25,19 @@ class BookService(val bookRepository: BookRepository) : IBookService {
         if (title.isNotBlank()) bookRepository.findAllByTitle(title)
         else bookRepository.findAll(Sort.by(Sort.Order.asc("title")))
 
-    override fun findByIsbn(isbn: String): Mono<Book> = bookRepository.findByIsbn(isbn)
+    override fun findByIsbn(isbn: String): Mono<Book> = bookRepository.findByIsbn(isbn).switchIfEmpty { Mono.error(BookNotFoundException(isbn)) }
+
 
     override fun existsByIsbn(isbn: String): Mono<Boolean> = bookRepository.existsByIsbn(isbn)
 
-    override fun deleteByIsbn(isbn: String): Mono<Boolean> = bookRepository.deleteByIsbn(isbn)
+    override fun deleteByIsbn(isbn: String): Mono<Boolean> =
+        existsByIsbn(isbn).flatMap { exist ->
+            if (exist) {
+                bookRepository.deleteByIsbn(isbn).map {
+                    it > 0L
+                }
+            } else {
+                Mono.error(BookNotFoundException(isbn))
+            }
+        }
 }
