@@ -6,3 +6,4 @@ spring:
   data:
     mongodb:
       database: book-catalog
+      auto-index-creation: true
