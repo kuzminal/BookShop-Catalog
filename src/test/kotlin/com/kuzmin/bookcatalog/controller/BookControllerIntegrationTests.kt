@@ -9,11 +9,9 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.client.TestRestTemplate
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import reactor.core.publisher.Mono
-
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
-class BookControllerIntegrationTests(val bookService: BookService) {
+class BookControllerIntegrationTests {
     val testRestTemplate: TestRestTemplate = TestRestTemplate()
 
     @Test
@@ -26,6 +24,6 @@ class BookControllerIntegrationTests(val bookService: BookService) {
         assertThat(response.statusCode).isEqualTo(HttpStatus.CREATED)
         assertThat(response.body).isNotNull
         assertThat(response.body?.isbn.orEmpty()).isEqualTo(expectedBook.isbn)
-        bookService.deleteByIsbn(expectedBook.isbn)
+        testRestTemplate.delete("http://localhost:9001/books/${expectedBook.isbn}")
     }
 }
