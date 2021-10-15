@@ -8,6 +8,7 @@ import org.springframework.boot.context.event.ApplicationReadyEvent
 import org.springframework.context.annotation.Profile
 import org.springframework.context.event.EventListener
 import org.springframework.stereotype.Component
+import java.time.Year
 
 @Component
 @Profile("local")
@@ -18,11 +19,11 @@ class BookDataLoader(private val bookRepository: BookRepository) {
     fun loadBookTestData() {
         val book1 = Book(
             ObjectId.get(), "", "Northern Lights", "Lyra Silvertongue",
-            "2011", 9.90
+            Year.of(2011), 9.90
         )
         val book2 = Book(
             ObjectId.get(), "", "Polar Journey", "Iorek Polarson",
-            "1993", 12.90
+            Year.of(1993), 12.90
         )
         bookRepository.save(book1)
         bookRepository.save(book2)

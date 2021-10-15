@@ -6,6 +6,7 @@ import org.bson.types.ObjectId
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
+import java.time.Year
 import javax.validation.ConstraintViolation
 import javax.validation.Validation
 
@@ -15,14 +16,14 @@ class BookValidationTests {
 
     @Test
     fun whenAllFieldsCorrectThenValidationSucceeds() {
-        val book = Book(ObjectId.get(), "9783161484100","Title", "Author", "2000", 9.90)
+        val book = Book(ObjectId.get(), "9783161484100","Title", "Author", Year.of(2000), 9.90)
         val violations: Set<ConstraintViolation<Book>> = validator.validate(book)
         assertThat(violations).isEmpty()
     }
 
     @Test
     fun whenIsbnDefinedButIncorrectThenValidationFails() {
-        val book = Book(ObjectId.get(), "978-3-16-148410-0","Title", "Author", "2000", 9.90)
+        val book = Book(ObjectId.get(), "978-3-16-148410-0","Title", "Author", Year.of(2000), 9.90)
         val violations: Set<ConstraintViolation<Book>> = validator.validate(book)
         assertThat(violations).hasSize(1)
         assertThat(violations.iterator().next().message)
