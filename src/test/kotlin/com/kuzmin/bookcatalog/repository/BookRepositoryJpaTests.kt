@@ -46,7 +46,14 @@ class BookRepositoryJpaTests(
         val actualBook: Mono<Book> = bookRepository.findByIsbn(bookIsbn)
         StepVerifier
             .create(actualBook)
-            .expectNext(expectedBook)
+            .expectNextMatches { book ->
+                book.id == expectedBook.id &&
+                book.isbn == expectedBook.isbn &&
+                book.title == expectedBook.title &&
+                book.author == expectedBook.author &&
+                book.publishingYear == expectedBook.publishingYear &&
+                book.price == expectedBook.price
+            }
             .expectComplete()
             .verify()
     }

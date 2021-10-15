@@ -1,4 +1,5 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.springframework.boot.gradle.tasks.bundling.BootBuildImage
 
 plugins {
     id("org.springframework.boot") version "2.5.3"
@@ -39,6 +40,11 @@ dependencyManagement {
     imports {
         mavenBom("org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}")
     }
+}
+
+tasks.withType<BootBuildImage> {
+    imageName = "kuzmin35/${project.name}:${project.version}"
+    environment =  mapOf("BP_JVM_VERSION" to "11.*")
 }
 
 tasks.withType<KotlinCompile> {
