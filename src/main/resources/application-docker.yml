@@ -3,8 +3,10 @@ spring:
     mongodb:
       database: book-catalog
       auto-index-creation: true
-      host: localhost
+      host: mongo-book-catalog-mongodb.default.svc.cluster.local
       port: 27017
+      username: user
+      password: password
   cloud:
     config:
       enabled: off
