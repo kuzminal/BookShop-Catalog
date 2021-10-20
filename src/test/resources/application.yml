@@ -3,3 +3,6 @@ spring:
     hibernate.ddl-auto: create-drop
   profiles:
     active: default
+  cloud:
+    config:
+      enabled: off
