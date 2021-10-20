@@ -1,0 +1,22 @@
+apiVersion: skaffold/v2beta24
+kind: Config
+metadata:
+  name: book-catalog
+build:
+  artifacts:
+  - image: kuzmin35/book-catalog
+    buildpacks:
+      builder: gcr.io/buildpacks/builder:v1
+deploy:
+  helm:
+    releases:
+      - name: book-catalog
+        remoteChart: bitnami/mongodb
+        setValues:
+          auth.username: user
+          auth.password: password
+          auth.database: book-catalog
+  kubectl:
+    manifests:
+      - k8s/deployment.yml
+      - k8s/service.yml
