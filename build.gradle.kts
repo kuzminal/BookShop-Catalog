@@ -1,3 +1,4 @@
+import com.google.protobuf.gradle.*
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.springframework.boot.gradle.tasks.bundling.BootBuildImage
 
@@ -6,12 +7,18 @@ plugins {
     id("io.spring.dependency-management") version "1.0.11.RELEASE"
     kotlin("jvm") version "1.5.21"
     kotlin("plugin.spring") version "1.5.21"
+    id("com.google.protobuf") version "0.8.17"
 }
+
 
 group = "com.kuzmin"
 version = "0.0.1-SNAPSHOT"
 java.sourceCompatibility = JavaVersion.VERSION_11
 var springCloudVersion = "2020.0.4"
+
+var grpcVersion = "1.41.0" // CURRENT_GRPC_VERSION
+var protobufVersion = "3.17.2"
+var protocVersion = protobufVersion
 
 repositories {
     mavenCentral()
@@ -30,6 +37,16 @@ dependencies {
     implementation("org.springframework.cloud:spring-cloud-starter-config")
     implementation("org.springframework.retry:spring-retry")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
+    //gRPC
+    implementation("io.grpc:grpc-protobuf:${grpcVersion}")
+    implementation("io.grpc:grpc-stub:${grpcVersion}")
+    implementation("com.google.protobuf:protobuf-java-util:${protobufVersion}")
+    runtimeOnly("io.grpc:grpc-netty-shaded:${grpcVersion}")
+    testImplementation("io.grpc:grpc-testing:${grpcVersion}")
+    implementation("io.grpc:protoc-gen-grpc-kotlin:1.2.0")
+    implementation("io.grpc:grpc-kotlin-stub:1.2.0")
+
     testImplementation("org.testcontainers:mongodb:1.15.2")
     testImplementation("org.testcontainers:junit-jupiter:1.16.0")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
@@ -44,7 +61,7 @@ dependencyManagement {
 
 tasks.withType<BootBuildImage> {
     imageName = "kuzmin35/${project.name}:${project.version}"
-    environment =  mapOf("BP_JVM_VERSION" to "11.*")
+    environment = mapOf("BP_JVM_VERSION" to "11.*")
 }
 
 tasks.withType<KotlinCompile> {
@@ -56,4 +73,54 @@ tasks.withType<KotlinCompile> {
 
 tasks.withType<Test> {
     useJUnitPlatform()
+}
+/*
+
+protobuf {
+    protoc {
+        artifact = "com.google.protobuf:protoc:${protobufVersion}"
+    }
+    plugins {
+        id("grpc") {
+            artifact = "io.grpc:protoc-gen-grpc-java:${grpcVersion}"
+        }
+        id("grpckt") {
+            path = tasks.jar.get().archiveFile.get().asFile.absolutePath
+        }
+    }
+    generateProtoTasks {
+        all().forEach {
+            if (it.name.startsWith("generateTestProto")) {
+                it.dependsOn("jar")
+            }
+
+            it.plugins {
+                id("grpc")
+                id("grpckt")
+            }
+        }
+    }
+}*/
+
+protobuf {
+    protoc{
+        artifact = "com.google.protobuf:protoc:${protobufVersion}"
+    }
+    //generatedFilesBaseDir = "$projectDir/src/main/kotlin/com/kuzmin/grpc/generated"
+    plugins {
+        id("grpc"){
+            artifact = "io.grpc:protoc-gen-grpc-java:${grpcVersion}"
+        }
+        id("grpckt") {
+            artifact = "io.grpc:protoc-gen-grpc-kotlin:1.2.0:jdk7@jar"
+        }
+    }
+    generateProtoTasks {
+        all().forEach {
+            it.plugins {
+                id("grpc")
+                id("grpckt")
+            }
+        }
+    }
 }
