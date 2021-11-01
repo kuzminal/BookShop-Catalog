@@ -30,6 +30,10 @@ data class Book(
     @field:NotNull(message = "The book price must be defined.")
     @field:Positive(message = "The book price must be greater than zero.")
     val price: Double = 0.0,
+    @NotNull
+    @Min(1)
+    @Max(5)
+    val quantity: Int  = 1,
     @Version
     private var version: Int = 0
 ) {

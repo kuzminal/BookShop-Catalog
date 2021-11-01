@@ -10,17 +10,23 @@ import org.springframework.stereotype.Component
 
 @Component
 class BookCatalogueImpl(private val bookService: BookService) : BookCatalogueGrpc.BookCatalogueImplBase() {
-    override fun getProduct(
+    override fun getBook(
         request: ProductInfo.BookIsbn,
         responseObserver: StreamObserver<ProductInfo.Book?>
     ) {
         val isbn: String = request.isbn
-
         bookService.existsByIsbn(isbn).subscribe { exist ->
             if (exist) {
                 bookService.findByIsbn(isbn).subscribe { book ->
                     responseObserver.onNext(
-                        book as ProductInfo.Book?
+                        ProductInfo.Book.newBuilder()
+                            .setIsbn(book.isbn)
+                            .setAuthor(book.author)
+                            .setPrice(book.price)
+                            .setTitle(book.title)
+                            .setPublishingYear(book.publishingYear.value)
+                            .setQuantity(book.quantity)
+                            .build()
                     )
                     responseObserver.onCompleted()
                 }
