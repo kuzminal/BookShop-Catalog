@@ -1,7 +1,6 @@
 package com.kuzmin.bookcatalog.service
 
 import com.kuzmin.bookcatalog.model.entity.Book
-import org.bson.types.ObjectId
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 

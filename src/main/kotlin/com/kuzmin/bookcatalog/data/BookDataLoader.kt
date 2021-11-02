@@ -18,11 +18,11 @@ class BookDataLoader(private val bookRepository: BookRepository) {
     @EventListener(ApplicationReadyEvent::class)
     fun loadBookTestData() {
         val book1 = Book(
-            ObjectId.get(), "", "Northern Lights", "Lyra Silvertongue",
+            "book1", "", "Northern Lights", "Lyra Silvertongue",
             Year.of(2011), 9.90
         )
         val book2 = Book(
-            ObjectId.get(), "", "Polar Journey", "Iorek Polarson",
+            "book1", "", "Polar Journey", "Iorek Polarson",
             Year.of(1993), 12.90
         )
         bookRepository.save(book1)

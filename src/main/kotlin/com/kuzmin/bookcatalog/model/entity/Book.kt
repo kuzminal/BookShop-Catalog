@@ -1,6 +1,5 @@
 package com.kuzmin.bookcatalog.model.entity
 
-import org.bson.types.ObjectId
 import org.springframework.data.annotation.Id
 import org.springframework.data.annotation.Version
 import org.springframework.data.mongodb.core.index.Indexed
@@ -11,7 +10,7 @@ import javax.validation.constraints.*
 
 @Document(collection = "books")
 data class Book(
-    @Id val id: ObjectId?,
+    @Id val id: String,
     @field:NotBlank(message = "The book ISBN must be defined.")
     @field:Pattern(
         regexp = "^(97([89]))?\\d{9}(\\d|X)$",

@@ -2,7 +2,6 @@ package com.kuzmin.bookcatalog.repository
 
 import com.kuzmin.bookcatalog.model.converter.YearAttributeConverter
 import com.kuzmin.bookcatalog.model.entity.Book
-import org.bson.types.ObjectId
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -42,7 +41,7 @@ class BookRepositoryJpaTests(
     @Test
     fun findBookByIsbnWhenExisting() {
         val bookIsbn = "1234561235"
-        val expectedBook = Book(ObjectId("6104032d71e8ba05acfdebbf"), bookIsbn, "Title", "Author", Year.of(2000), 12.90)
+        val expectedBook = Book("6104032d71e8ba05acfdebbf", bookIsbn, "Title", "Author", Year.of(2000), 12.90)
         val actualBook: Mono<Book> = bookRepository.findByIsbn(bookIsbn)
         StepVerifier
             .create(actualBook)
