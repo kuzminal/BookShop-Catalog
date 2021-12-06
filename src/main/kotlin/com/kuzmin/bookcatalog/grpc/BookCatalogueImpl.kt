@@ -1,7 +1,6 @@
 package com.kuzmin.bookcatalog.grpc
 
 import bookcatalogue.BookCatalogueGrpc
-import bookcatalogue.BookCatalogueGrpcKt
 import bookcatalogue.ProductInfo
 import com.kuzmin.bookcatalog.service.BookService
 import io.grpc.Status

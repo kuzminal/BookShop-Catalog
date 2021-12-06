@@ -81,6 +81,10 @@ tasks.withType<Test> {
     useJUnitPlatform()
 }
 
+sourceSets.main {
+    java.srcDirs("$buildDir/generated/source/proto/main")
+}
+
 
 protobuf {
     protoc {
