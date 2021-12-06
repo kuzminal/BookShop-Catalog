@@ -41,7 +41,7 @@ class BookRepositoryJpaTests(
     @Test
     fun findBookByIsbnWhenExisting() {
         val bookIsbn = "1234561235"
-        val expectedBook = Book("6104032d71e8ba05acfdebbf", bookIsbn, "Title", "Author", Year.of(2000), 12.90)
+        val expectedBook = Book("6104032d71e8ba05acfdebbf", bookIsbn, "Title", "Author", 2000, 12.90)
         val actualBook: Mono<Book> = bookRepository.findByIsbn(bookIsbn)
         StepVerifier
             .create(actualBook)

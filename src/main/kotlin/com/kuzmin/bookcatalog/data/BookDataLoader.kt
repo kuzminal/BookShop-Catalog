@@ -19,11 +19,11 @@ class BookDataLoader(private val bookRepository: BookRepository) {
     fun loadBookTestData() {
         val book1 = Book(
             "book1", "", "Northern Lights", "Lyra Silvertongue",
-            Year.of(2011), 9.90
+            2011, 9.90
         )
         val book2 = Book(
             "book1", "", "Polar Journey", "Iorek Polarson",
-            Year.of(1993), 12.90
+            1993, 12.90
         )
         bookRepository.save(book1)
         bookRepository.save(book2)

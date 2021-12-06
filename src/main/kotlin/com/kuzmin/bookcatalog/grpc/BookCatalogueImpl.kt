@@ -1,6 +1,7 @@
 package com.kuzmin.bookcatalog.grpc
 
 import bookcatalogue.BookCatalogueGrpc
+import bookcatalogue.BookCatalogueGrpcKt
 import bookcatalogue.ProductInfo
 import com.kuzmin.bookcatalog.service.BookService
 import io.grpc.Status
@@ -24,7 +25,7 @@ class BookCatalogueImpl(private val bookService: BookService) : BookCatalogueGrp
                             .setAuthor(book.author)
                             .setPrice(book.price)
                             .setTitle(book.title)
-                            .setPublishingYear(book.publishingYear.value)
+                            .setPublishingYear(book.publishingYear)
                             .setQuantity(book.quantity)
                             .build()
                     )

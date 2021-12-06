@@ -27,7 +27,7 @@ class BookControllerIntegrationTests {
     @Test
     fun getBook() {
         val bookService: BookService = Mockito.mock(BookService::class.java)
-        val book = Book("6104032d71e8ba05acfdebbf", "9783161484101", "Title", "Author", Year.of(1991), 9.90)
+        val book = Book("6104032d71e8ba05acfdebbf", "9783161484101", "Title", "Author", 1991, 9.90)
         `when`(bookService.findByIsbn("9783161484101"))
             .thenReturn(Mono.just(book))
         val testClient = WebTestClient.bindToController(

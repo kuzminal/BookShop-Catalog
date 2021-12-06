@@ -8,3 +8,6 @@ spring:
   cloud:
     config:
       enabled: off
+  redis:
+    host: localhost
+    port: 6379
